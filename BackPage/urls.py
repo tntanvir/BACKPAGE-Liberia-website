@@ -24,6 +24,7 @@ urlpatterns = [
     path('api/auth/', include('authsystem.urls')),
     path('api/artist/', include('artist.urls')),
     path('api/video/', include('video.urls')),
+    path('api/market/', include('market.urls')),
 ]
 
 if settings.DEBUG:

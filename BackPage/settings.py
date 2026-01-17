@@ -50,7 +50,8 @@ INSTALLED_APPS = [
     # my apps
     'authsystem',
     'artist',
-    'video'
+    'video',
+    'market',
 ]
 
 MIDDLEWARE = [
