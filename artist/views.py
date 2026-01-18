@@ -171,72 +171,6 @@ class CommentListView(APIView):
 
 
 
-# class MostPopularArtistView(APIView):
-
-#     def get(self, request):
-
-#         # --- Music aggregates ---
-#         music_listen_subquery = (
-#             Music.objects
-#             .filter(artist=OuterRef('pk'))
-#             .values('artist')
-#             .annotate(total=Sum('total_listens'))
-#             .values('total')
-#         )
-
-#         music_download_subquery = (
-#             Music.objects
-#             .filter(artist=OuterRef('pk'))
-#             .values('artist')
-#             .annotate(total=Sum('total_downloads'))
-#             .values('total')
-#         )
-
-#         music_count_subquery = (
-#             Music.objects
-#             .filter(artist=OuterRef('pk'))
-#             .values('artist')
-#             .annotate(total=Count('id'))
-#             .values('total')
-#         )
-
-#         # --- Likes via Music ---
-#         like_subquery = (
-#             Like.objects
-#             .filter(music__artist=OuterRef('pk'))
-#             .values('music__artist')
-#             .annotate(total=Count('id'))
-#             .values('total')
-#         )
-
-#         artists = (
-#             Artist.objects
-#             .annotate(
-#                 calculated_total_listens=Coalesce(
-#                     Subquery(music_listen_subquery, output_field=IntegerField()), 0
-#                 ),
-#                 calculated_total_downloads=Coalesce(
-#                     Subquery(music_download_subquery, output_field=IntegerField()), 0
-#                 ),
-#                 calculated_total_music=Coalesce(
-#                     Subquery(music_count_subquery, output_field=IntegerField()), 0
-#                 ),
-#                 calculated_total_likes=Coalesce(
-#                     Subquery(like_subquery, output_field=IntegerField()), 0
-#                 ),
-#             )
-#             .order_by(
-#                 '-calculated_total_listens',
-#                 '-calculated_total_downloads',
-#                 '-calculated_total_likes',
-#                 '-calculated_total_music',
-#             )
-#         )
-
-#         serializer = ArtistSerializer(artists, many=True)
-#         return Response(serializer.data)
-
-
 
 class FeaturedArtistView(APIView):
     def get(self, request):
@@ -312,13 +246,6 @@ class TrendingMusicView(APIView):
 
 
 
-
-
-
-
-
-
-
 class LatestMusicByArtistView(APIView):
     def get(self, request):
         # Fetch artists ordered by their latest music creation date
@@ -328,3 +255,80 @@ class LatestMusicByArtistView(APIView):
         
         serializer = ArtistSerializer(latest_artists, many=True)
         return Response(serializer.data)
+
+
+
+
+
+
+
+
+
+
+
+
+
+# class MostPopularArtistView(APIView):
+
+#     def get(self, request):
+
+#         # --- Music aggregates ---
+#         music_listen_subquery = (
+#             Music.objects
+#             .filter(artist=OuterRef('pk'))
+#             .values('artist')
+#             .annotate(total=Sum('total_listens'))
+#             .values('total')
+#         )
+
+#         music_download_subquery = (
+#             Music.objects
+#             .filter(artist=OuterRef('pk'))
+#             .values('artist')
+#             .annotate(total=Sum('total_downloads'))
+#             .values('total')
+#         )
+
+#         music_count_subquery = (
+#             Music.objects
+#             .filter(artist=OuterRef('pk'))
+#             .values('artist')
+#             .annotate(total=Count('id'))
+#             .values('total')
+#         )
+
+#         # --- Likes via Music ---
+#         like_subquery = (
+#             Like.objects
+#             .filter(music__artist=OuterRef('pk'))
+#             .values('music__artist')
+#             .annotate(total=Count('id'))
+#             .values('total')
+#         )
+
+#         artists = (
+#             Artist.objects
+#             .annotate(
+#                 calculated_total_listens=Coalesce(
+#                     Subquery(music_listen_subquery, output_field=IntegerField()), 0
+#                 ),
+#                 calculated_total_downloads=Coalesce(
+#                     Subquery(music_download_subquery, output_field=IntegerField()), 0
+#                 ),
+#                 calculated_total_music=Coalesce(
+#                     Subquery(music_count_subquery, output_field=IntegerField()), 0
+#                 ),
+#                 calculated_total_likes=Coalesce(
+#                     Subquery(like_subquery, output_field=IntegerField()), 0
+#                 ),
+#             )
+#             .order_by(
+#                 '-calculated_total_listens',
+#                 '-calculated_total_downloads',
+#                 '-calculated_total_likes',
+#                 '-calculated_total_music',
+#             )
+#         )
+
+#         serializer = ArtistSerializer(artists, many=True)
+#         return Response(serializer.data)
