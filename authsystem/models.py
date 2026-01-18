@@ -26,7 +26,7 @@ class User(AbstractUser):
     username = None  # Remove username field
     name = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
-    image = models.URLField(null=True, blank=True)
+    image = models.ImageField(upload_to='profile_images/', null=True, blank=True)
     location = models.CharField(max_length=255, null=True, blank=True)
     bio = models.TextField(null=True, blank=True)
     

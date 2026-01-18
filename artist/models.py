@@ -73,7 +73,7 @@ User = get_user_model()
 
 
 class Artist(models.Model):
-    image = models.URLField()
+    image = models.ImageField(upload_to='images/')
     name = models.CharField(max_length=100)
     artist_type = models.CharField(
         max_length=20,
