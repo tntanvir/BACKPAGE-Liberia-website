@@ -33,9 +33,11 @@ class ArtistSerializer(serializers.ModelSerializer):
         return Music.objects.filter(artist=obj).count()
 
     def get_total_listens(self, obj):
+        # return Music.objects.filter(artist=obj).aggregate(total=Sum('total_listens'))['total'] or 0
         return Listen.objects.filter(music__artist=obj).count()
     
     def get_total_downloads(self, obj):
+        # return Music.objects.filter(artist=obj).aggregate(total=Sum('total_downloads'))['total'] or 0
         return Download.objects.filter(music__artist=obj).count()
     
     def get_total_likes(self, obj):
@@ -109,3 +111,5 @@ class CommentSerializer(serializers.ModelSerializer):
         model = Comment
         fields = '__all__'
         read_only_fields = ['user']
+
+

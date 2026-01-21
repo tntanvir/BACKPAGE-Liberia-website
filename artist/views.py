@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from django.db.models import Count, F
 from rest_framework.views import APIView
 from django.shortcuts import get_object_or_404
-from .models import Artist, Music, Like, Dislike, Comment , Listen , Download
+from .models import Artist, Music, Like, Dislike, Comment , CommentLike , Listen , Download
 from django.db.models import Count, Sum, Subquery, OuterRef, IntegerField, Max
 from django.db.models.functions import Coalesce
 from .serializers import (
@@ -12,6 +12,7 @@ from .serializers import (
     LikeSerializer,
     DislikeSerializer,
     CommentSerializer,
+
 )
 from rest_framework.pagination import PageNumberPagination
 
@@ -90,9 +91,13 @@ class MusicListCreateView(APIView):
         # List view with optional filtering
         queryset = Music.objects.all()
         artist_id = request.query_params.get('artist')
+        music_search = request.query_params.get('search')
         
         if artist_id:
             queryset = queryset.filter(artist_id=artist_id)
+
+        if music_search:
+            queryset = queryset.filter(title__icontains=music_search)
 
         paginator = MusicPagination()
         result_page = paginator.paginate_queryset(queryset, request)
@@ -168,7 +173,20 @@ class CommentListView(APIView):
     
 
 
-
+class CommentLikeCreateView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    def get(self, request, comment_pk=None):
+        try:
+            comment = Comment.objects.get(pk=comment_pk)
+        except Comment.DoesNotExist:
+            return Response({'error': 'Comment not found'}, status=status.HTTP_404_NOT_FOUND)
+        comment_like = CommentLike.objects.filter(user=request.user, comment=comment)
+        comment_like_count = CommentLike.objects.filter(comment=comment).count()
+        if comment_like.exists():
+            comment_like.delete()
+            return Response({'message': 'Comment like removed','comment_like_count': comment_like_count-1}, status=status.HTTP_200_OK)
+        comment_like = CommentLike.objects.create(user=request.user, comment=comment)
+        return Response({'message': 'Comment like added','comment_like_count': comment_like_count+1}, status=status.HTTP_201_CREATED)
 
 
 

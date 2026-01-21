@@ -1,0 +1,135 @@
+{
+    "info": {
+        "_postman_id": "bbaee0f5-489b-41da-bae9-ddfd1af1ab0d",
+        "name": "BackPage Video Downloader",
+        "description": "Collection for testing the Video Downloader features including analysis, downloading, status checking, and file retrieval.",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "1. Analyze Video",
+            "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"url\": \"https://www.youtube.com/watch?v=dQw4w9WgXcQ\"\n}",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    }
+                },
+                "url": {
+                    "raw": "{{base_url}}/api/video/query-video/",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "api",
+                        "video",
+                        "query-video",
+                        ""
+                    ]
+                },
+                "description": "Analyzes a video URL to get available formats and metadata. Returns a list of format IDs."
+            },
+            "response": []
+        },
+        {
+            "name": "2. Start Download",
+            "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"url\": \"https://www.youtube.com/watch?v=dQw4w9WgXcQ\",\n    \"format_id\": \"best\"\n}",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    }
+                },
+                "url": {
+                    "raw": "{{base_url}}/api/video/download/",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "api",
+                        "video",
+                        "download",
+                        ""
+                    ]
+                },
+                "description": "Initiates a background download task. Returns a 'task_id' to track progress."
+            },
+            "response": []
+        },
+        {
+            "name": "3. Check Task Status",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "{{base_url}}/api/video/status/:task_id/",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "api",
+                        "video",
+                        "status",
+                        ":task_id",
+                        ""
+                    ],
+                    "variable": [
+                        {
+                            "key": "task_id",
+                            "value": "REPLACE_WITH_TASK_ID",
+                            "description": "The ID returned from the 'Start Download' endpoint"
+                        }
+                    ]
+                },
+                "description": "Checks the status of the download task. If successful, returns a 'download_url'."
+            },
+            "response": []
+        },
+        {
+            "name": "4. Retrieve File",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "{{base_url}}/api/video/retrieve/:task_id/",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "api",
+                        "video",
+                        "retrieve",
+                        ":task_id",
+                        ""
+                    ],
+                    "variable": [
+                        {
+                            "key": "task_id",
+                            "value": "REPLACE_WITH_TASK_ID",
+                            "description": "The task ID for the successfully completed download"
+                        }
+                    ]
+                },
+                "description": "Downloads the actual file once the task status is 'SUCCESS'. This will stream the file to your client."
+            },
+            "response": []
+        }
+    ],
+    "variable": [
+        {
+            "key": "base_url",
+            "value": "http://127.0.0.1:8000",
+            "type": "string"
+        }
+    ]
+}
