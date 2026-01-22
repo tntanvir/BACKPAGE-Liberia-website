@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Artist, Music , Like, Dislike, Comment, Listen, Download
+from .models import Artist, Music , Like, Dislike, Comment, Listen, Download, Category
 
 # Register your models here.
 @admin.register(Artist)
@@ -53,4 +53,11 @@ class DownloadAdmin(admin.ModelAdmin):
     list_display = ('user', 'music', 'created_at')
     list_filter = ('user', 'music')
     search_fields = ('user__username', 'music__title')
+    ordering = ('-created_at',)
+
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('name', 'created_at')
+    list_filter = ('name',)
+    search_fields = ('name',)
     ordering = ('-created_at',)

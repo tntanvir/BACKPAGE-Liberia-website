@@ -2,7 +2,10 @@ from django.db import models
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
-
+class Category(models.Model):
+    name = models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 class Artist(models.Model):
     image = models.ImageField(upload_to='images/')
@@ -24,12 +27,7 @@ class Music(models.Model):
     artist = models.ForeignKey(Artist, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='images/')
     audio = models.FileField(upload_to='music/')
-    music_type = models.CharField(
-        max_length=20,
-        choices=[('trapco', 'Trapco'), ('hiphop', 'Hiphop')],
-        blank=True,
-        null=True
-    )
+    music_type = models.ForeignKey(Category, on_delete=models.CASCADE,null=True,blank=True)
     title = models.CharField(max_length=100)
     total_listens = models.IntegerField(default=0)
     total_downloads = models.IntegerField(default=0)

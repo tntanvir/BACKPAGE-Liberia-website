@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from django.db.models import Count, F
 from rest_framework.views import APIView
 from django.shortcuts import get_object_or_404
-from .models import Artist, Music, Like, Dislike, Comment , CommentLike , Listen , Download
+from .models import Artist, Music, Like, Dislike, Comment , CommentLike , Listen , Download, Category
 from django.db.models import Count, Sum, Subquery, OuterRef, IntegerField, Max
 from django.db.models.functions import Coalesce
 from .serializers import (
@@ -12,7 +12,7 @@ from .serializers import (
     LikeSerializer,
     DislikeSerializer,
     CommentSerializer,
-
+    CategorySerializer,
 )
 from rest_framework.pagination import PageNumberPagination
 
@@ -72,7 +72,11 @@ class ArtistListCreateView(APIView):
         artist.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-
+class CategoryListCreateView(APIView):
+    def get(self, request):
+        categories = Category.objects.all()
+        serializer = CategorySerializer(categories, many=True)
+        return Response(serializer.data)
 
 class MusicPagination(PageNumberPagination):
     page_size = 15
@@ -91,13 +95,38 @@ class MusicListCreateView(APIView):
         # List view with optional filtering
         queryset = Music.objects.all()
         artist_id = request.query_params.get('artist')
+        music_type = request.query_params.get('category')
         music_search = request.query_params.get('search')
+        sortby = request.query_params.get('sortby')
         
         if artist_id:
             queryset = queryset.filter(artist_id=artist_id)
 
+        if music_type:
+            queryset = queryset.filter(music_type__name__iexact=music_type)
+
         if music_search:
             queryset = queryset.filter(title__icontains=music_search)
+        
+        if sortby:
+            if sortby == 'newest':
+                queryset = queryset.order_by('-created_at')
+            elif sortby == 'oldest':
+                queryset = queryset.order_by('created_at')
+            elif sortby == 'popular':
+                queryset = queryset.annotate(
+                    total_likes_count=Count('like', distinct=True),
+                    total_comments_count=Count('comment', distinct=True),
+                    total_downloads_count=Count('download', distinct=True),
+                    total_listens_count=Count('listen', distinct=True),
+                    total_dislikes_count=Count('dislike', distinct=True),
+                    popularity_score=(
+                        F('total_likes_count') + 
+                        F('total_comments_count') + 
+                        F('total_downloads_count') + 
+                        F('total_listens_count')
+                    ) - F('total_dislikes_count')
+                ).order_by('-popularity_score')
 
         paginator = MusicPagination()
         result_page = paginator.paginate_queryset(queryset, request)
@@ -245,7 +274,11 @@ class MyProfileDataView(APIView):
 class TrendingMusicView(APIView):
     def get(self, request):
         perams = request.query_params.get('perams')
-        musics = Music.objects.filter(music_type=perams).annotate(
+        musics = Music.objects.all()
+        if perams:
+            musics = musics.filter(music_type__name__iexact=perams)
+        
+        musics = musics.annotate(
             total_likes=Count('like', distinct=True),
             total_dislikes=Count('dislike', distinct=True),
             total_comments=Count('comment', distinct=True),

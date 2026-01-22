@@ -11,7 +11,7 @@ urlpatterns = [
     path('music/<int:pk>/', views.MusicListCreateView.as_view(), name='music-detail'),
     path('trending/music/', views.TrendingMusicView.as_view(), name='music-trending'),
     path('music/latest/', views.LatestMusicByArtistView.as_view(), name='music-latest'),
-    
+    path('categories/', views.CategoryListCreateView.as_view(), name='category-list-create'),
     path('likes/<int:music_pk>/', views.LikeCreateView.as_view(), name='like-create'),
     path('dislikes/<int:music_pk>/', views.DislikeCreateView.as_view(), name='dislike-create'),
     

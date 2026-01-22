@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Artist, Music, Like, Dislike, Comment, Download , Listen
+from .models import Artist, Music, Like, Dislike, Comment, Download , Listen , Category
 from django.db.models import Sum, Count
 from authsystem.serializers import UserSerializer
 
@@ -59,7 +59,13 @@ class MusicSerializer(serializers.ModelSerializer):
         queryset=Artist.objects.all(), write_only=True
     )
     artist_detail = ArtistSerializer(source='artist', read_only=True)
-
+    
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        if instance.music_type:
+            representation['music_type'] = instance.music_type.name
+        return representation
+    
     class Meta:
         model = Music
         fields = [
@@ -113,3 +119,7 @@ class CommentSerializer(serializers.ModelSerializer):
         read_only_fields = ['user']
 
 
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = '__all__'
