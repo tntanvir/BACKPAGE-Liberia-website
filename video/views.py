@@ -1,16 +1,25 @@
-from django.shortcuts import render, get_object_or_404
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from .models import Video
-from .serializers import VideoSerializer, AnalyzeSerializer, DownloadSerializer
-from django.http import FileResponse
-from celery.result import AsyncResult
-from .services import VideoDownloaderService
-from .utils import FileCleanupWrapper
-from .tasks import download_video_task
-import os
 import logging
+import os
+
+from celery.result import AsyncResult
+from django.db.models import Count, F
+from django.http import FileResponse
+from django.shortcuts import get_object_or_404, render
+from rest_framework import permissions, status
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from .models import Video, Videoview, VideoCategory
+from .serializers import (
+    AnalyzeSerializer,
+    DownloadSerializer,
+    VideoSerializer,
+    VideoviewSerializer,
+    VideoCategorySerializer,
+)
+from .services import VideoDownloaderService
+from .tasks import download_video_task
+from .utils import FileCleanupWrapper
 
 logger = logging.getLogger(__name__)
 
@@ -18,8 +27,26 @@ logger = logging.getLogger(__name__)
 
 class VideoListCreateView(APIView):
     def get(self, request):
-        videos = Video.objects.all()
-        serializer = VideoSerializer(videos, many=True)
+        queryset = Video.objects.all()
+        
+        # Search by title
+        title_search = request.query_params.get('search')
+        if title_search:
+            queryset = queryset.filter(title__icontains=title_search)
+        
+        # Filter by category name
+        category_filter = request.query_params.get('category')
+        if category_filter:
+            queryset = queryset.filter(category__name__iexact=category_filter)
+        
+        # Sort by newest/oldest
+        sortby = request.query_params.get('sortby')
+        if sortby == 'newest':
+            queryset = queryset.order_by('-created_at')
+        elif sortby == 'oldest':
+            queryset = queryset.order_by('created_at')
+            
+        serializer = VideoSerializer(queryset, many=True)
         return Response(serializer.data)
 
     def post(self, request):
@@ -160,3 +187,54 @@ class FileRetrieveView(APIView):
        except Exception as e:
            logger.error(f"Retrieve Error: {e}")
            return Response({"error": "Error retrieving file"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class MusicVideoListView(APIView):
+    def get(self, request):
+        videos = Video.objects.filter(tag='music_video')
+        serializer = VideoSerializer(videos, many=True)
+        return Response(serializer.data)
+
+class MovieListView(APIView):
+    def get(self, request):
+        videos = Video.objects.filter(tag='movie')
+        serializer = VideoSerializer(videos, many=True)
+        return Response(serializer.data)
+
+class TrendingVideoListView(APIView):
+    def get(self, request):
+        # Annotate with total view counts and order by it
+        videos = Video.objects.annotate(
+            total_views=Count('videoview')
+        ).order_by('-total_views')
+        serializer = VideoSerializer(videos, many=True)
+        return Response(serializer.data)
+
+
+
+class VideoViewCreateView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request):
+        # Expects {"video": <id>}
+        serializer = VideoviewSerializer(data=request.data)
+        
+        video_id = request.data.get('video')
+        if not video_id:
+             return Response({"error": "Video ID required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        video = get_object_or_404(Video, pk=video_id)
+        
+        # Check if a Videoview exists for this video
+        # We assume one Videoview object per Video to aggregate counts
+        view_obj, created = Videoview.objects.get_or_create(video=video)
+        view_obj.view_count += 1
+        view_obj.save()
+        
+        return Response({"message": "View recorded", "total_views": view_obj.view_count}, status=status.HTTP_201_CREATED)
+
+class VideoCategoryListView(APIView):
+    def get(self, request):
+        categories = VideoCategory.objects.all()
+        serializer = VideoCategorySerializer(categories, many=True)
+        return Response(serializer.data)

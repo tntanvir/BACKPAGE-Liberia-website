@@ -29,6 +29,7 @@ class Music(models.Model):
     audio = models.FileField(upload_to='music/')
     music_type = models.ForeignKey(Category, on_delete=models.CASCADE,null=True,blank=True)
     title = models.CharField(max_length=100)
+    description = models.TextField(blank=True,null=True)
     total_listens = models.IntegerField(default=0)
     total_downloads = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Artist, Music, Like, Dislike, Comment, Download , Listen , Category
+from .models import Artist, Music, Like, Dislike, Comment, Download , Listen , Category , CommentLike
 from django.db.models import Sum, Count
 from authsystem.serializers import UserSerializer
 
@@ -76,6 +76,7 @@ class MusicSerializer(serializers.ModelSerializer):
             'audio',
             'title',
             'music_type',
+            'description',
             'total_listens',
             'total_downloads',
             'total_likes',
@@ -113,10 +114,16 @@ class DislikeSerializer(serializers.ModelSerializer):
         read_only_fields = ['user']
 
 class CommentSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+    like = serializers.SerializerMethodField()
+    
     class Meta:
         model = Comment
         fields = '__all__'
         read_only_fields = ['user']
+
+    def get_like(self, obj):
+        return CommentLike.objects.filter(comment=obj).count()
 
 
 class CategorySerializer(serializers.ModelSerializer):

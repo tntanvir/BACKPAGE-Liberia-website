@@ -1,15 +1,24 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, parsers
-from .models import Product, ProductImage
-from .serializers import ProductSerializer
+from .models import Product, ProductImage, ProductCategory
+from .serializers import ProductSerializer, ProductCategorySerializer
 
+
+class ProductCategoryListAPIView(APIView):
+    def get(self, request):
+        categories = ProductCategory.objects.all()
+        serializer = ProductCategorySerializer(categories, many=True)
+        return Response(serializer.data)
 
 class ProductListCreateAPIView(APIView):
     parser_classes = [parsers.MultiPartParser, parsers.FormParser]
 
     def get(self, request):
         products = Product.objects.all()
+        category_name = request.query_params.get('category')
+        if category_name:
+            products = products.filter(category__name__iexact=category_name)
         serializer = ProductSerializer(products, many=True)
         return Response(serializer.data)
 

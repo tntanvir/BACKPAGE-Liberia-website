@@ -1,7 +1,14 @@
 from rest_framework import serializers
-from .models import Video
+from .models import Video, VideoCategory, Videoview
+
+class VideoCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VideoCategory
+        fields = '__all__'
 
 class VideoSerializer(serializers.ModelSerializer):
+    category_name = serializers.CharField(source='category.name', read_only=True)
+    
     class Meta:
         model = Video
         fields = '__all__'
@@ -13,6 +20,12 @@ class VideoSerializer(serializers.ModelSerializer):
         elif instance.menual_video:
             representation.pop('youtube_url', None)
         return representation
+
+class VideoviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Videoview
+        fields = ['video', 'view_count']
+        read_only_fields = ['view_count']
 
 class AnalyzeSerializer(serializers.Serializer):
    url = serializers.URLField(required=True)
