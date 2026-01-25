@@ -15,4 +15,5 @@ urlpatterns = [
     path('trending/', views.TrendingVideoListView.as_view(), name='trending-video-list'),
     path('categories/', views.VideoCategoryListView.as_view(), name='video-category-list'),
     path('view/', views.VideoViewCreateView.as_view(), name='video-view-create'),
+    path('new-release/', views.NewReleaseListView.as_view(), name='new-release-list'),
 ]

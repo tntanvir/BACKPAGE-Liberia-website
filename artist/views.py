@@ -79,9 +79,9 @@ class CategoryListCreateView(APIView):
         return Response(serializer.data)
 
 class MusicPagination(PageNumberPagination):
-    page_size = 15
+    page_size = 20
     page_size_query_param = 'page_size'
-    max_page_size = 100
+    max_page_size = 1000
 class MusicListCreateView(APIView):
     # permission_classes = [permissions.IsAuthenticated]
 

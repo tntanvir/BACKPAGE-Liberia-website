@@ -55,4 +55,4 @@ class ChangePasswordSerializer(serializers.Serializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'email', 'name', 'image', 'location', 'bio', 'is_verified']
+        fields = ['id', 'email', 'name', 'phone', 'image', 'location', 'bio', 'is_verified']

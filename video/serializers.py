@@ -6,6 +6,9 @@ class VideoCategorySerializer(serializers.ModelSerializer):
         model = VideoCategory
         fields = '__all__'
 
+    def __str__(self):
+        return self.name
+
 class VideoSerializer(serializers.ModelSerializer):
     category_name = serializers.CharField(source='category.name', read_only=True)
     

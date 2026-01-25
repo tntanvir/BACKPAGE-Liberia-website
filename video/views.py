@@ -144,7 +144,7 @@ class TaskStatusView(APIView):
            # Construct the retrieve URL
            # In a real app, use reverse(). For now, simple string construction.
            # We assume the client knows where to go, or we provide the link.
-           response_data['download_url'] = f"/api/v1/retrieve/{task_id}/"
+           response_data['download_url'] = f"/api/video/retrieve/{task_id}/"
        elif result.state == 'FAILURE':
            response_data['error'] = str(result.result)
 
@@ -238,3 +238,10 @@ class VideoCategoryListView(APIView):
         categories = VideoCategory.objects.all()
         serializer = VideoCategorySerializer(categories, many=True)
         return Response(serializer.data)
+
+
+class NewReleaseListView(APIView):
+    def get(self, request):
+       videos = Video.objects.all().order_by('-created_at')[:5]
+       serializer = VideoSerializer(videos, many=True)
+       return Response(serializer.data)

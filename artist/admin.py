@@ -20,40 +20,40 @@ class MusicAdmin(admin.ModelAdmin):
     search_fields = ('title', 'artist__name')
     ordering = ('-created_at',)
 
-@admin.register(Like)
-class LikeAdmin(admin.ModelAdmin):
-    list_display = ('user', 'music', 'created_at')
-    list_filter = ('user', 'music')
-    search_fields = ('user__username', 'music__title')
-    ordering = ('-created_at',)
+# @admin.register(Like)
+# class LikeAdmin(admin.ModelAdmin):
+#     list_display = ('user', 'music', 'created_at')
+#     list_filter = ('user', 'music')
+#     search_fields = ('user__username', 'music__title')
+#     ordering = ('-created_at',)
 
-@admin.register(Dislike)
-class DislikeAdmin(admin.ModelAdmin):
-    list_display = ('user', 'music', 'created_at')
-    list_filter = ('user', 'music')
-    search_fields = ('user__username', 'music__title')
-    ordering = ('-created_at',)
+# @admin.register(Dislike)
+# class DislikeAdmin(admin.ModelAdmin):
+#     list_display = ('user', 'music', 'created_at')
+#     list_filter = ('user', 'music')
+#     search_fields = ('user__username', 'music__title')
+#     ordering = ('-created_at',)
 
-@admin.register(Comment)
-class CommentAdmin(admin.ModelAdmin):
-    list_display = ('user', 'music', 'comment', 'created_at')
-    list_filter = ('user', 'music')
-    search_fields = ('user__username', 'music__title')
-    ordering = ('-created_at',)
+# @admin.register(Comment)
+# class CommentAdmin(admin.ModelAdmin):
+#     list_display = ('user', 'music', 'comment', 'created_at')
+#     list_filter = ('user', 'music')
+#     search_fields = ('user__username', 'music__title')
+#     ordering = ('-created_at',)
 
-@admin.register(Listen)
-class ListenAdmin(admin.ModelAdmin):
-    list_display = ('user', 'music', 'created_at')
-    list_filter = ('user', 'music')
-    search_fields = ('user__username', 'music__title')
-    ordering = ('-created_at',)
+# @admin.register(Listen)
+# class ListenAdmin(admin.ModelAdmin):
+#     list_display = ('user', 'music', 'created_at')
+#     list_filter = ('user', 'music')
+#     search_fields = ('user__username', 'music__title')
+#     ordering = ('-created_at',)
 
-@admin.register(Download)
-class DownloadAdmin(admin.ModelAdmin):
-    list_display = ('user', 'music', 'created_at')
-    list_filter = ('user', 'music')
-    search_fields = ('user__username', 'music__title')
-    ordering = ('-created_at',)
+# @admin.register(Download)
+# class DownloadAdmin(admin.ModelAdmin):
+#     list_display = ('user', 'music', 'created_at')
+#     list_filter = ('user', 'music')
+#     search_fields = ('user__username', 'music__title')
+#     ordering = ('-created_at',)
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):

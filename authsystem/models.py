@@ -29,7 +29,7 @@ class User(AbstractUser):
     image = models.ImageField(upload_to='profile_images/', null=True, blank=True)
     location = models.CharField(max_length=255, null=True, blank=True)
     bio = models.TextField(null=True, blank=True)
-    
+    phone = models.CharField(max_length=15, null=True, blank=True)
     otp = models.CharField(max_length=6, null=True, blank=True)
     otp_created_at = models.DateTimeField(null=True, blank=True)
     

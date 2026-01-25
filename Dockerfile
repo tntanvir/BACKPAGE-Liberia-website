@@ -27,8 +27,8 @@ RUN pip install -r requirements.txt
 COPY . /app/
 
 # Expose port (documentary)
-EXPOSE 8000
+EXPOSE 9000
 
 # Run entrypoint script (optional, but good for migrations)
 # We will define the actual command in docker-compose
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["python", "manage.py", "runserver", "0.0.0.0:9000"]
