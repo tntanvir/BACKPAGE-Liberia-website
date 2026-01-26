@@ -237,3 +237,113 @@ CELERY_TASK_SERIALIZER = 'json'
 
 
 FILE_UPLOAD_MAX_MEMORY_SIZE = 1024 * 1024 * 1024 * 1024  # 1 TB
+
+from django.urls import reverse_lazy
+from django.utils.translation import gettext_lazy as _
+
+UNFOLD = {
+    "SITE_TITLE": "BackPage Admin",
+    "SITE_HEADER": "BackPage",
+    "SITE_URL": "/",
+    "THEME": "dark",
+    "COLORS": {
+        "primary": {
+            "50": "254 242 242",
+            "100": "254 226 226",
+            "200": "254 202 202",
+            "300": "252 165 165",
+            "400": "248 113 113",
+            "500": "239 68 68",
+            "600": "220 38 38",
+            "700": "185 28 28",
+            "800": "153 27 27",
+            "900": "127 29 29",
+            "950": "69 10 10",
+        },
+    },
+    "SIDEBAR": {
+        "show_search": True,
+        "show_all_applications": True,
+        "navigation": [
+            {
+                "title": _("Navigation"),
+                "separator": True,
+                "items": [
+                    {
+                        "title": _("Dashboard"),
+                        "icon": "dashboard",
+                        "link": reverse_lazy("admin:index"),
+                    },
+                ],
+            },
+            {
+                "title": _("Users & Auth"),
+                "separator": True,
+                "items": [
+                    {
+                        "title": _("Users"),
+                        "icon": "people",
+                        "link": reverse_lazy("admin:authsystem_user_changelist"),
+                    },
+                    {
+                        "title": _("Groups"),
+                        "icon": "group",
+                        "link": reverse_lazy("admin:auth_group_changelist"),
+                    },
+                ],
+            },
+            {
+                "title": _("Content Management"),
+                "separator": True,
+                "items": [
+                    {
+                        "title": _("Artists"),
+                        "icon": "mic",
+                        "link": reverse_lazy("admin:artist_artist_changelist"),
+                    },
+                    {
+                        "title": _("Music"),
+                        "icon": "music_note",
+                        "link": reverse_lazy("admin:artist_music_changelist"),
+                    },
+                    {
+                        "title": _("Music Categories"),
+                        "icon": "category",
+                        "link": reverse_lazy("admin:artist_category_changelist"),
+                    },
+                    {
+                        "title": _("Videos"),
+                        "icon": "movie",
+                        "link": reverse_lazy("admin:video_video_changelist"),
+                    },
+                    {
+                        "title": _("Video Categories"),
+                        "icon": "category",
+                        "link": reverse_lazy("admin:video_videocategory_changelist"),
+                    },
+                ],
+            },
+            {
+                "title": _("Marketplace & Property"),
+                "separator": True,
+                "items": [
+                    {
+                        "title": _("Products"),
+                        "icon": "shopping_bag",
+                        "link": reverse_lazy("admin:market_product_changelist"),
+                    },
+                    {
+                        "title": _("Product Categories"),
+                        "icon": "category",
+                        "link": reverse_lazy("admin:market_productcategory_changelist"),
+                    },
+                    {
+                        "title": _("Properties"),
+                        "icon": "domain",
+                        "link": reverse_lazy("admin:market_property_changelist"),
+                    },
+                ],
+            },
+        ],
+    },
+}

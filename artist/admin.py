@@ -1,9 +1,10 @@
 from django.contrib import admin
-from .models import Artist, Music , Like, Dislike, Comment, Listen, Download, Category
+from unfold.admin import ModelAdmin
+from .models import Artist, Music, Like, Dislike, Comment, Listen, Download, Category
 
 # Register your models here.
 @admin.register(Artist)
-class ArtistAdmin(admin.ModelAdmin):
+class ArtistAdmin(ModelAdmin):
     list_display = ('name', 'artist_type', 'bio', 'location', 'total_music', 'created_at')
     list_filter = ('artist_type', 'location')
     search_fields = ('name', 'bio', 'location')
@@ -14,49 +15,16 @@ class ArtistAdmin(admin.ModelAdmin):
     total_music.short_description = 'Total Music'
 
 @admin.register(Music)
-class MusicAdmin(admin.ModelAdmin):
+class MusicAdmin(ModelAdmin):
     list_display = ('title', 'artist', 'music_type', 'total_listens', 'total_downloads', 'created_at')
     list_filter = ('artist', 'music_type')
     search_fields = ('title', 'artist__name')
     ordering = ('-created_at',)
 
-# @admin.register(Like)
-# class LikeAdmin(admin.ModelAdmin):
-#     list_display = ('user', 'music', 'created_at')
-#     list_filter = ('user', 'music')
-#     search_fields = ('user__username', 'music__title')
-#     ordering = ('-created_at',)
-
-# @admin.register(Dislike)
-# class DislikeAdmin(admin.ModelAdmin):
-#     list_display = ('user', 'music', 'created_at')
-#     list_filter = ('user', 'music')
-#     search_fields = ('user__username', 'music__title')
-#     ordering = ('-created_at',)
-
-# @admin.register(Comment)
-# class CommentAdmin(admin.ModelAdmin):
-#     list_display = ('user', 'music', 'comment', 'created_at')
-#     list_filter = ('user', 'music')
-#     search_fields = ('user__username', 'music__title')
-#     ordering = ('-created_at',)
-
-# @admin.register(Listen)
-# class ListenAdmin(admin.ModelAdmin):
-#     list_display = ('user', 'music', 'created_at')
-#     list_filter = ('user', 'music')
-#     search_fields = ('user__username', 'music__title')
-#     ordering = ('-created_at',)
-
-# @admin.register(Download)
-# class DownloadAdmin(admin.ModelAdmin):
-#     list_display = ('user', 'music', 'created_at')
-#     list_filter = ('user', 'music')
-#     search_fields = ('user__username', 'music__title')
-#     ordering = ('-created_at',)
+# ... (comments commented out in original)
 
 @admin.register(Category)
-class CategoryAdmin(admin.ModelAdmin):
+class CategoryAdmin(ModelAdmin):
     list_display = ('name', 'created_at')
     list_filter = ('name',)
     search_fields = ('name',)
