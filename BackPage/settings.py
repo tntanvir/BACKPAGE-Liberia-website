@@ -205,9 +205,11 @@ CORS_ALLOW_ORIGINS = [
     'http://localhost:8000',
     'http://76.13.30.50',
     'http://76.13.30.50:8888',
+    'https://admin.bpliberia.com',
+    'http://admin.bpliberia.com',
 ]
 
-ALLOWED_HOSTS = ['localhost', '76.13.30.50', '127.0.0.1', '10.10.13.80']
+ALLOWED_HOSTS = ['localhost', '76.13.30.50', '127.0.0.1', '10.10.13.80', 'admin.bpliberia.com']
 
 CSRF_TRUSTED_ORIGINS = [
     'https://walleyed-manipulatively-katelynn.ngrok-free.dev',
@@ -219,6 +221,8 @@ CSRF_TRUSTED_ORIGINS = [
     'http://76.13.30.50',
     'https://76.13.30.50',
     'http://76.13.30.50:8888',
+    'https://admin.bpliberia.com',
+    'http://admin.bpliberia.com',
 ]
 
 # Celery Configuration
