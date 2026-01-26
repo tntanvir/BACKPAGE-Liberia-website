@@ -1,35 +1,26 @@
+# Use official Python image
+FROM python:3.12-slim
 
-# Use an official Python runtime as a parent image
-FROM python:3.13-slim
-
-# Set environment variables
+# Environment variables
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-# Set work directory
+# Set workdir
 WORKDIR /app
 
-# Install system dependencies
-# ffmpeg is required for yt-dlp to merge video/audio
-# libpq-dev and gcc are often needed for psycopg2 if postgres is used later
-RUN apt-get update && apt-get install -y \
-    ffmpeg \
-    gcc \
-    libpq-dev \
-    && rm -rf /var/lib/apt/lists/*
-
-# Install python dependencies
-COPY requirements.txt /app/
-RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+# Install dependencies
+COPY requirements.txt .
+RUN pip install --upgrade pip \
+    && pip install -r requirements.txt
 
 # Copy project
-COPY . /app/
+COPY . .
 
-# Expose port (documentary)
-# Expose port (documentary)
-EXPOSE 9000
+# Create folder for static files
+RUN mkdir -p /app/staticfiles
 
-# Run entrypoint script (optional, but good for migrations)
-# We will define the actual command in docker-compose
-CMD ["python", "manage.py", "runserver", "0.0.0.0:9000"]
+# Collect static files
+RUN python manage.py collectstatic --noinput
+
+# Run Gunicorn (WSGI)
+CMD ["gunicorn", "BackPage.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "4"]
