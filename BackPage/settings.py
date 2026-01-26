@@ -208,11 +208,11 @@ CORS_ALLOW_ORIGINS = [
     'https://admin.bpliberia.com',
     'http://admin.bpliberia.com',
     'http://10.10.13.57:8000',
-    'https://backpage-liberia.netlify.app/',
+    'https://backpage-liberia.netlify.app',
 ]
 CORS_ALLOW_ALL_ORIGINS = True
 
-ALLOWED_HOSTS = ['localhost', '76.13.30.50', '127.0.0.1', '10.10.13.80', 'admin.bpliberia.com', '10.10.13.57:8000','https://backpage-liberia.netlify.app/',]
+ALLOWED_HOSTS = ['localhost', '76.13.30.50', '127.0.0.1', '10.10.13.80', 'admin.bpliberia.com', '10.10.13.57:8000','https://backpage-liberia.netlify.app',]
 
 CSRF_TRUSTED_ORIGINS = [
     'https://walleyed-manipulatively-katelynn.ngrok-free.dev',
@@ -227,7 +227,7 @@ CSRF_TRUSTED_ORIGINS = [
     'https://admin.bpliberia.com',
     'http://admin.bpliberia.com',
     'http://10.10.13.57:8000',
-    'https://backpage-liberia.netlify.app/',
+    'https://backpage-liberia.netlify.app',
 ]
 
 # Celery Configuration
