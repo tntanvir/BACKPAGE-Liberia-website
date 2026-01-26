@@ -209,6 +209,7 @@ CORS_ALLOW_ORIGINS = [
     'http://admin.bpliberia.com',
     'http://10.10.13.57:8000'
 ]
+CORS_ALLOW_ALL_ORIGINS = True
 
 ALLOWED_HOSTS = ['localhost', '76.13.30.50', '127.0.0.1', '10.10.13.80', 'admin.bpliberia.com', '10.10.13.57:8000']
 
