@@ -27,6 +27,7 @@ RUN pip install -r requirements.txt
 COPY . /app/
 
 # Expose port (documentary)
+# Expose port (documentary)
 EXPOSE 9000
 
 # Run entrypoint script (optional, but good for migrations)

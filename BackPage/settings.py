@@ -199,6 +199,11 @@ CORS_ALLOW_CREDENTIALS = True
 
 CSRF_TRUSTED_ORIGINS = [
     'https://walleyed-manipulatively-katelynn.ngrok-free.dev',
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+    'http://localhost:5173',
+    'http://localhost:8000',
+    'http://localhost:9000',
 ]
 
 # Celery Configuration
