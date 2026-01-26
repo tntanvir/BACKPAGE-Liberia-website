@@ -26,8 +26,6 @@ SECRET_KEY = 'django-insecure-ql66se5%h8xfwq6^ulklzoln8)#966i-g5ng+u4j*5@!@w!ll%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['*']
-
 
 # Application definition
 
@@ -195,9 +193,21 @@ STORAGES = {
 
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
-CORS_ALLOW_ALL_ORIGINS = True
 
 CORS_ALLOW_CREDENTIALS = True 
+
+CORS_ALLOW_ORIGINS = [ 
+    'https://walleyed-manipulatively-katelynn.ngrok-free.dev',
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+    'http://localhost:5173',
+    'http://localhost:8888',
+    'http://localhost:8000',
+    'http://76.13.30.50',
+    'http://76.13.30.50:8888',
+]
+
+ALLOWED_HOSTS = ['localhost', '76.13.30.50', '127.0.0.1', '10.10.13.80']
 
 CSRF_TRUSTED_ORIGINS = [
     'https://walleyed-manipulatively-katelynn.ngrok-free.dev',
@@ -205,7 +215,10 @@ CSRF_TRUSTED_ORIGINS = [
     'http://127.0.0.1:3000',
     'http://localhost:5173',
     'http://localhost:8000',
-    'http://localhost:9000',
+    'http://localhost:8888',
+    'http://76.13.30.50',
+    'https://76.13.30.50',
+    'http://76.13.30.50:8888',
 ]
 
 # Celery Configuration
@@ -216,4 +229,4 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
 
 
-FILE_UPLOAD_MAX_MEMORY_SIZE = 500 * 1024 * 1024  # 500 MB
+FILE_UPLOAD_MAX_MEMORY_SIZE = 1024 * 1024 * 1024 * 1024  # 1 TB
