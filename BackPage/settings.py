@@ -99,8 +99,8 @@ WSGI_APPLICATION = 'BackPage.wsgi.application'
 #     }
 # }
 DATABASES = {
-    "default": dj_database_url.parse(
-        os.getenv("DATABASE_URL"),
+    "default": dj_database_url.config(
+        default=config("DATABASE_URL", default=f"sqlite:///{BASE_DIR}/db.sqlite3"),
         conn_max_age=600,
         ssl_require=False,
     )
@@ -367,9 +367,9 @@ UNFOLD = {
                         "link": reverse_lazy("admin:ads_ads_changelist"),
                     },
                     {
-                        "title": _("Ads Categories"),
+                        "title": _("Ads Pages"),
                         "icon": "category",
-                        "link": reverse_lazy("admin:ads_adscategory_changelist"),
+                        "link": reverse_lazy("admin:ads_adspage_changelist"),
                     },
                 ],
             }
