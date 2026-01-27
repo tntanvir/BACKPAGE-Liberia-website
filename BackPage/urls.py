@@ -25,6 +25,7 @@ urlpatterns = [
     path('api/artist/', include('artist.urls')),
     path('api/video/', include('video.urls')),
     path('api/market/', include('market.urls')),
+    path('api/ads/', include('ads.urls')),
 ]
 
 if settings.DEBUG:
