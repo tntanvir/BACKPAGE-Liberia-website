@@ -12,7 +12,7 @@ class AdsListView(APIView):
         page_name = request.query_params.get('page')
         
         if page_name:
-            ads = Ads.objects.filter(page=page_name)
+            ads = Ads.objects.filter(page__name__icontains=page_name)
         else:
             ads = Ads.objects.all()
             
