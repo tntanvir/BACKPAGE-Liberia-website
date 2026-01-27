@@ -357,6 +357,22 @@ UNFOLD = {
                     },
                 ],
             },
+            {
+                "title": _("Ads"),
+                "separator": True,
+                "items": [
+                    {
+                        "title": _("Ads"),
+                        "icon": "ads",
+                        "link": reverse_lazy("admin:ads_ads_changelist"),
+                    },
+                    {
+                        "title": _("Ads Categories"),
+                        "icon": "category",
+                        "link": reverse_lazy("admin:ads_adscategory_changelist"),
+                    },
+                ],
+            }
         ],
     },
 }
