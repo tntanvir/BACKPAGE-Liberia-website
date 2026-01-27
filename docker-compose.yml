@@ -1,11 +1,13 @@
+version: "3.9"
+ 
 services:
   web:
     build: .
     command: gunicorn BackPage.wsgi:application --bind 0.0.0.0:9000 --workers 3
     volumes:
       - .:/app
-      - ./staticfiles:/app/staticfiles
-      - ./media:/app/media
+      - /var/www/ropeace/static:/app/staticfiles
+      - /var/www/ropeace/media:/app/media
     env_file:
       - .env
     environment:
