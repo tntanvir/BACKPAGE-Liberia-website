@@ -2,8 +2,14 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Ads
-from .serializers import AdsSerializer
+from rest_framework import generics
+from .models import Ads, AdsPage
+from .serializers import AdsSerializer, AdsPageSerializer
+
+class AdsPageView(generics.ListCreateAPIView):
+    queryset = AdsPage.objects.all()
+    serializer_class = AdsPageSerializer
+
 
 # Create your views here.
 
