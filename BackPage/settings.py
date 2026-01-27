@@ -195,9 +195,9 @@ STORAGES = {
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 
-CORS_ALLOW_CREDENTIALS = True 
+CORS_ALLOWED_CREDENTIALS = True 
 
-CORS_ALLOW_ORIGINS = [ 
+CORS_ALLOWED_ORIGINS = [ 
     'https://walleyed-manipulatively-katelynn.ngrok-free.dev',
     'http://localhost:3000',
     'http://127.0.0.1:3000',
@@ -211,7 +211,7 @@ CORS_ALLOW_ORIGINS = [
     'http://10.10.13.57:8000',
     'https://backpage-liberia.netlify.app',
 ]
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ALL_ORIGINS = True
 
 ALLOWED_HOSTS = ['localhost', '76.13.30.50', '127.0.0.1', '10.10.13.80', 'admin.bpliberia.com', '10.10.13.57:8000','backpage-liberia.netlify.app',]
 
