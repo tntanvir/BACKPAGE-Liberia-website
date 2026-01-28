@@ -15,7 +15,7 @@ class Ads(models.Model):
 
     page = models.ForeignKey(AdsPage, on_delete=models.CASCADE, null=True, blank=True)
     image = models.ImageField(upload_to='ads/')
-    link = models.URLField()
+    link = models.URLField(max_length=1000, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
