@@ -20,6 +20,7 @@ class MusicAdmin(ModelAdmin):
     list_filter = ('artist', 'music_type')
     search_fields = ('title', 'artist__name')
     ordering = ('-created_at',)
+    
 
 # ... (comments commented out in original)
 
