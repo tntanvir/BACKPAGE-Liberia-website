@@ -147,13 +147,16 @@ class GoogleLoginView(views.APIView):
             email = google_data.get("email")
             name = google_data.get("name", "")
             picture = google_data.get("picture", "")
-            print(google_data)
             if not email:
                 return Response({"error": "Google account does not have an email address"}, status=status.HTTP_400_BAD_REQUEST)
 
             # Check if user exists
             try:
                 user = User.objects.get(email=email)
+                if not user.is_active or not user.is_verified:
+                    user.is_active = True
+                    user.is_verified = True
+                    user.save()
             except User.DoesNotExist:
                 # Create user
                 user = User.objects.create(
