@@ -12,11 +12,12 @@ logger = logging.getLogger(__name__)
 
 class VideoDownloaderService:
    def __init__(self):
-       self.base_opts = {
-           'quiet': True,
-           'noplaylist': True,
-           'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-       }
+        self.base_opts = {
+            'quiet': True,
+            'noplaylist': True,
+            'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'cookiefile': '/app/cookies.txt',
+        }
 
 
    def _get_filesize_str(self, filesize):
