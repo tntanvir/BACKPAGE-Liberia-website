@@ -43,7 +43,7 @@ version: "3.9"
 services:
   web:
     build: .
-    command: gunicorn BackPage.wsgi:application --bind 0.0.0.0:9000 --workers 3
+    command: gunicorn BackPage.wsgi:application --bind 0.0.0.0:9000 --workers 3 --timeout 300
     env_file:
       - .env
     volumes:
@@ -63,6 +63,8 @@ services:
       - .env
     volumes:
       - .:/app
+      - /var/www/ropeace/static:/app/staticfiles
+      - /var/www/ropeace/media:/app/media
     depends_on:
       - db
       - redis

@@ -33,6 +33,8 @@ ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app
 
+RUN apt-get update && apt-get install -y --no-install-recommends ffmpeg libpq-dev gcc && rm -rf /var/lib/apt/lists/*
+
 COPY requirements.txt .
 
 RUN pip install --upgrade pip \
@@ -42,4 +44,6 @@ COPY . .
 
 RUN mkdir -p /app/staticfiles
 
-CMD ["gunicorn", "BackPage.wsgi:application", "--bind", "0.0.0.0:9000", "--workers", "4"]
+CMD ["gunicorn", "BackPage.wsgi:application", "--bind", "0.0.0.0:9000", "--workers", "4", "--timeout", "300"]
+
+

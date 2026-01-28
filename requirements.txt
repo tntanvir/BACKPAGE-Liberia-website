@@ -14,6 +14,7 @@ click-didyoumean==0.3.1
 click-plugins==1.1.1.2
 click-repl==0.3.0
 distro==1.9.0
+dj-database-url==3.1.0
 Django==6.0
 django-cors-headers==4.9.0
 django-storages==1.14.6
@@ -21,6 +22,7 @@ django-unfold==0.77.1
 djangorestframework==3.16.1
 djangorestframework_simplejwt==5.5.1
 drf-spectacular==0.29.0
+ffmpeg==1.4
 gunicorn==24.1.1
 h11==0.16.0
 httpcore==1.0.9
@@ -58,6 +60,6 @@ uritemplate==4.2.0
 urllib3==2.6.3
 vine==5.1.0
 wcwidth==0.2.14
+whitenoise==6.11.0
 yt-dlp==2025.12.8
 psycopg2-binary==2.9.9
-dj-database-url==2.2.0

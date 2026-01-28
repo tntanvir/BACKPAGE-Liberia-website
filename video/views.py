@@ -132,7 +132,7 @@ class TaskStatusView(APIView):
        """
        Check the status of a download task.
        """
-       result = AsyncResult(task_id)
+       result = app.AsyncResult(task_id)
       
        response_data = {
            "task_id": task_id,
@@ -152,15 +152,19 @@ class TaskStatusView(APIView):
        return Response(response_data)
 
 
+from BackPage.celery import app
+
 class FileRetrieveView(APIView):
    def get(self, request, task_id):
        """
        Retrieve the downloaded file (once task is SUCCESS).
        """
-       result = AsyncResult(task_id)
+       result = app.AsyncResult(task_id)
+       logger.info(f"Checking task {task_id}: State={result.state}, Backend={app.backend}")
       
        if result.state != 'SUCCESS':
-           return Response({"error": "Task not ready or failed"}, status=status.HTTP_400_BAD_REQUEST)
+           logger.error(f"Task {task_id} not ready. State: {result.state}")
+           return Response({"error": f"Task not ready or failed (State: {result.state})"}, status=status.HTTP_400_BAD_REQUEST)
       
        # Result is the dict we returned in tasks.py
        data = result.result
