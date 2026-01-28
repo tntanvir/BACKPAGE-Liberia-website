@@ -309,7 +309,12 @@ class LatestMusicByArtistView(APIView):
 
 
 
-
+class MusicListenView(APIView):
+    def post(self, request):
+        music = get_object_or_404(Music, pk=request.data['music_id'])
+        user = request.user if request.user.is_authenticated else None
+        listen = Listen.objects.create(music=music, user=user)
+        return Response({'message': 'Music listened successfully'})
 
 
 

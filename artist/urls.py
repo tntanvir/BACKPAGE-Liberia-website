@@ -18,6 +18,7 @@ urlpatterns = [
     path('comments/<int:music_pk>/', views.CommentListView.as_view(), name='comment-list-create'),
     path('comment-likes/<int:comment_pk>/', views.CommentLikeCreateView.as_view(), name='comment-like-create'),
 
-    path('my-profile-data/', views.MyProfileDataView.as_view(), name='my-profile-data')
+    path('my-profile-data/', views.MyProfileDataView.as_view(), name='my-profile-data'),
+    path('listen/', views.MusicListenView.as_view(), name='music-listen'),
 
 ]

@@ -55,6 +55,8 @@ class MusicSerializer(serializers.ModelSerializer):
     total_likes = serializers.SerializerMethodField()
     total_dislikes = serializers.SerializerMethodField()
     total_comments = serializers.SerializerMethodField()
+    total_listens = serializers.SerializerMethodField()
+    total_downloads = serializers.SerializerMethodField()
     artist = serializers.PrimaryKeyRelatedField(
         queryset=Artist.objects.all(), write_only=True
     )

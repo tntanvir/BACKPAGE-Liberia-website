@@ -62,7 +62,7 @@ class CommentLike(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
 class Listen(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     music = models.ForeignKey(Music, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
