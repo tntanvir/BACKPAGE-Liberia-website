@@ -36,15 +36,16 @@ class VideoDownloaderService:
         'force_ipv4': True,
         'sleep_interval': 1,
         'max_sleep_interval': 5,
+        'cachedir': '/app/yt_cache',
         'http_headers': {
-            'User-Agent': 'Mozilla/5.0 (Linux; Android 13; Pixel 7)',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
             'Accept-Language': 'en-US,en;q=0.9',
             'Accept': '*/*',
             'Sec-Fetch-Mode': 'navigate',
         },
         'extractor_args': {
             'youtube': {
-                'player_client': ['android', 'ios'],
+                # 'player_client': ['android', 'ios'], # Disable forced mobile clients to allow bgutil (Web) to work
                 'skip': ['dash', 'hls'],
             }
         }
