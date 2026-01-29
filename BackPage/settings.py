@@ -251,6 +251,9 @@ CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
 
+COOKIES_FILE = config('COOKIES_FILE', default='/app/cookies.txt')
+
+
 
 FILE_UPLOAD_MAX_MEMORY_SIZE = 1024 * 1024 * 1024 * 1024  # 1 TB
 

@@ -14,17 +14,23 @@ logger = logging.getLogger(__name__)
 
 class VideoDownloaderService:
     def __init__(self):
+        self.cookie_file = getattr(settings, 'COOKIES_FILE', '/app/cookies.txt')
+        
         self.base_opts = {
             'quiet': True,
             'noplaylist': True,
             'force_ipv4': True,
-            'cookiefile': '/app/cookies.txt',
             'extractor_args': {
                 'youtube': {
                     'player_client': ['android', 'web'],
                 }
             }
         }
+        
+        if os.path.exists(self.cookie_file):
+            self.base_opts['cookiefile'] = self.cookie_file
+        else:
+            logger.warning(f"Cookies file not found at {self.cookie_file}. Continuing without cookies.")
 
 
     def _get_filesize_str(self, filesize):
@@ -36,6 +42,8 @@ class VideoDownloaderService:
     def analyze(self, url):
         """Extract metadata and available formats for the given URL."""
         opts = self.base_opts.copy()
+        
+        logger.info(f"Analyzing URL: {url} using opts: {opts}")
        
         try:
             with yt_dlp.YoutubeDL(opts) as ydl:

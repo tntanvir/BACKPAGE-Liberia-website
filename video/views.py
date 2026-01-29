@@ -95,7 +95,7 @@ class AnalyzeView(APIView):
                if "403" in err_msg or "Private" in err_msg:
                     return Response({"error": "Content is private or rectricted"}, status=status.HTTP_403_FORBIDDEN)
               
-               logger.error(f"Analysis Error: {e}")
+               logger.error(f"Analysis Error: {e}", exc_info=True)
                return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
       
        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
