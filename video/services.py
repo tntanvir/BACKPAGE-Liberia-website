@@ -12,9 +12,23 @@ from pathlib import Path
 logger = logging.getLogger(__name__)
 
 
+import random
+import glob
+
 class VideoDownloaderService:
     def __init__(self):
-        self.cookie_file = getattr(settings, 'COOKIES_FILE', '/app/cookies.txt')
+        self.cookie_path_setting = getattr(settings, 'COOKIES_FILE', '/app/cookies.txt')
+        self.cookie_file = self.cookie_path_setting
+
+        # Cookie Rotation Logic
+        if os.path.isdir(self.cookie_path_setting):
+            cookie_files = glob.glob(os.path.join(self.cookie_path_setting, '*.txt'))
+            if cookie_files:
+                self.cookie_file = random.choice(cookie_files)
+                logger.info(f"Cookie Rotation: Selected {os.path.basename(self.cookie_file)} from {len(cookie_files)} files.")
+            else:
+                logger.warning(f"Cookie directory {self.cookie_path_setting} is empty. No cookies will be used.")
+                self.cookie_file = None
         
         self.base_opts = {
             'quiet': True,
@@ -26,10 +40,10 @@ class VideoDownloaderService:
             }
         }
         
-        if os.path.exists(self.cookie_file):
+        if self.cookie_file and os.path.exists(self.cookie_file):
             self.base_opts['cookiefile'] = self.cookie_file
-        else:
-            logger.warning(f"Cookies file not found at {self.cookie_file}. Continuing without cookies.")
+        elif self.cookie_file:
+             logger.warning(f"Cookies file not found at {self.cookie_file}. Continuing without cookies.")
 
 
     def _get_filesize_str(self, filesize):
