@@ -51,6 +51,8 @@ services:
       - /var/www/ropeace/static:/app/staticfiles
       - /var/www/ropeace/media:/app/media
       - /root/.config/google-chrome:/root/.config/google-chrome
+      - ./cookies.txt:/cookies.txt
+
     ports:
       - "9000:9000"
     depends_on:
@@ -67,6 +69,8 @@ services:
       - /var/www/ropeace/static:/app/staticfiles
       - /var/www/ropeace/media:/app/media
       - /root/.config/google-chrome:/root/.config/google-chrome
+      - ./cookies.txt:/cookies.txt
+
     depends_on:
       - db
       - redis
