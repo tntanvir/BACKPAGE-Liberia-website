@@ -1,8 +1,10 @@
 from celery import shared_task
 from .services import VideoDownloaderService
+from artist.models import Music, Download
+from django.contrib.auth import get_user_model
 import logging
 
-
+User = get_user_model()
 logger = logging.getLogger(__name__)
 
 
@@ -15,25 +17,25 @@ def download_video_task(self, url, format_id, music_id=None, user_id=None):
    try:
        service = VideoDownloaderService()
        file_path, temp_dir = service.download(url, format_id)
-      
-       # Track download if music_id is provided
+       
+       # Track Music Download
        if music_id:
            try:
-               from artist.models import Music, Download
-               from django.contrib.auth import get_user_model
-               
                music = Music.objects.get(id=music_id)
                music.total_downloads += 1
                music.save()
                
                if user_id:
-                   User = get_user_model()
-                   user_obj = User.objects.get(id=user_id)
-                   Download.objects.create(user=user_obj, music=music)
+                   try:
+                       user = User.objects.get(id=user_id) or None 
+                       Download.objects.create(user=user, music=music)
+                   except User.DoesNotExist:
+                       logger.warning(f"User {user_id} not found for download tracking")
+           except Music.DoesNotExist:
+               logger.warning(f"Music {music_id} not found for download tracking")
            except Exception as e:
-               # Log error but don't fail the download
-               logger.error(f"Failed to track download: {e}")
-
+               logger.error(f"Error tracking download: {e}")
+      
        # We return the paths as strings.
        # Note: In a diverse worker env, workers and web must share the filesystem.
        # Since this is a simple setup on one machine (or mounted volume), this is fine.

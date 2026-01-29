@@ -111,7 +111,7 @@ class DownloadView(APIView):
            url = serializer.validated_data['url']
            format_id = serializer.validated_data['format_id']
           
-           music_id = serializer.validated_data.get('music_id')
+           music_id = serializer.validated_data.get('music_id') or None
            user_id = request.user.id if request.user.is_authenticated else None
            
            # Dispatch Async Task
@@ -132,7 +132,7 @@ class TaskStatusView(APIView):
        """
        Check the status of a download task.
        """
-       result = app.AsyncResult(task_id)
+       result = AsyncResult(task_id)
       
        response_data = {
            "task_id": task_id,
@@ -152,19 +152,15 @@ class TaskStatusView(APIView):
        return Response(response_data)
 
 
-from BackPage.celery import app
-
 class FileRetrieveView(APIView):
    def get(self, request, task_id):
        """
        Retrieve the downloaded file (once task is SUCCESS).
        """
-       result = app.AsyncResult(task_id)
-       logger.info(f"Checking task {task_id}: State={result.state}, Backend={app.backend}")
+       result = AsyncResult(task_id)
       
        if result.state != 'SUCCESS':
-           logger.error(f"Task {task_id} not ready. State: {result.state}")
-           return Response({"error": f"Task not ready or failed (State: {result.state})"}, status=status.HTTP_400_BAD_REQUEST)
+           return Response({"error": "Task not ready or failed"}, status=status.HTTP_400_BAD_REQUEST)
       
        # Result is the dict we returned in tasks.py
        data = result.result

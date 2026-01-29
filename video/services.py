@@ -12,12 +12,16 @@ logger = logging.getLogger(__name__)
 
 class VideoDownloaderService:
    def __init__(self):
-        self.base_opts = {
-            'quiet': True,
-            'noplaylist': True,
-            'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-            'cookiefile': '/app/cookies.txt',
-        }
+       self.base_opts = {
+           'quiet': True,
+           'noplaylist': True,
+           'force_ipv4': True,
+           'extractor_args': {
+               'youtube': {
+                   'player_client': ['android', 'web'],
+               }
+           }
+       }
 
 
    def _get_filesize_str(self, filesize):
@@ -46,64 +50,48 @@ class VideoDownloaderService:
                best_audio_id = audio_formats[-1]['format_id']
 
 
-           # Handle generic/direct files (S3, etc.)
-           if str(info.get('extractor_key', '')).lower() == 'generic':
-               # For generic files, yt-dlp might not populate 'formats' or the 'formats' might be the file itself
-               # If formats is empty, construct a single format from the info
-               if not raw_formats:
-                   raw_formats = [info]
+           for f in raw_formats:
+               vcodec = f.get('vcodec')
+               acodec = f.get('acodec')
+               height = f.get('height')
+               filesize = f.get('filesize') or f.get('filesize_approx')
+
+
+               # Skip audio-only
+               if vcodec == 'none':
+                   continue
               
+               # Determine if merge is needed (Video-only 1080p+ usually)
+               needs_merge = False
+               if acodec == 'none' and vcodec != 'none':
+                   needs_merge = True
+
+
+               format_id = f['format_id']
+               if needs_merge and best_audio_id:
+                   format_id = f"{format_id}+{best_audio_id}"
+              
+               resolution = f"{height}p" if height else "Unknown"
+               if not height:
+                   resolution = "Auto/Best"
+
+
+               # TikTok HD Check
+               note = f.get('format_note') or ''
+               if info.get('extractor_key') == 'TikTok' and height and height >= 1080:
+                    note = "HD"
+              
+               if needs_merge:
+                    note = f"{note} (Merged)" if note else "(Merged)"
+
+
                formats.append({
-                   "format_id": info.get('format_id', 'source'),
-                   "resolution": "Original",
-                   "ext": info.get('ext', 'unknown'),
-                   "filesize": self._get_filesize_str(info.get('filesize')),
-                   "note": "Direct File"
+                   "format_id": format_id,
+                   "resolution": resolution,
+                   "ext": f.get('ext', 'mp4'),
+                   "filesize": self._get_filesize_str(filesize),
+                   "note": note.strip()
                })
-           else:
-               for f in raw_formats:
-                   vcodec = f.get('vcodec')
-                   acodec = f.get('acodec')
-                   height = f.get('height')
-                   filesize = f.get('filesize') or f.get('filesize_approx')
-
-
-                   # Skip audio-only (UNLESS we want to support audio downloads from YT too?)
-                   # For now, keep existing logic but maybe allow audio if it's the only thing?
-                   if vcodec == 'none' and acodec == 'none':
-                       continue
-                   
-                   # Determine if merge is needed (Video-only 1080p+ usually)
-                   needs_merge = False
-                   if acodec == 'none' and vcodec != 'none':
-                       needs_merge = True
-
-
-                   format_id = f['format_id']
-                   if needs_merge and best_audio_id:
-                       format_id = f"{format_id}+{best_audio_id}"
-                  
-                   resolution = f"{height}p" if height else "Unknown"
-                   if not height:
-                       resolution = "Auto/Best"
-
-
-                   # TikTok HD Check
-                   note = f.get('format_note') or ''
-                   if info.get('extractor_key') == 'TikTok' and height and height >= 1080:
-                        note = "HD"
-                  
-                   if needs_merge:
-                        note = f"{note} (Merged)" if note else "(Merged)"
-
-
-                   formats.append({
-                       "format_id": format_id,
-                       "resolution": resolution,
-                       "ext": f.get('ext', 'mp4'),
-                       "filesize": self._get_filesize_str(filesize),
-                       "note": note.strip()
-                   })
 
 
            formats.insert(0, {
@@ -155,11 +143,7 @@ class VideoDownloaderService:
            if "tiktok.com" in url:
                opts['format'] = "best[height>=1280]/best[height>=1080]/best"
            else:
-                # For generic files, 'best' is just the default
-                if "youtube.com" in url or "youtu.be" in url:
-                    opts['format'] = 'bestvideo+bestaudio/best'
-                else:
-                    opts['format'] = 'best'
+               opts['format'] = 'bestvideo+bestaudio/best'
        else:
            opts['format'] = format_id
 
