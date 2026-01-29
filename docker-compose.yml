@@ -50,6 +50,7 @@ services:
       - .:/app
       - /var/www/ropeace/static:/app/staticfiles
       - /var/www/ropeace/media:/app/media
+      - /root/.config/google-chrome:/root/.config/google-chrome
     ports:
       - "9000:9000"
     depends_on:
