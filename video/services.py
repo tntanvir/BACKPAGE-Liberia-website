@@ -36,8 +36,6 @@ class VideoDownloaderService:
         'force_ipv4': True,
         'sleep_interval': 1,
         'max_sleep_interval': 5,
-#        'cookiesfrombrowser': ('chrome',),
-        'cookiefile': '/cookies.txt',
         'http_headers': {
             'User-Agent': 'Mozilla/5.0 (Linux; Android 13; Pixel 7)',
             'Accept-Language': 'en-US,en;q=0.9',
@@ -46,7 +44,7 @@ class VideoDownloaderService:
         },
         'extractor_args': {
             'youtube': {
-                'player_client': ['android', 'web'],
+                'player_client': ['android', 'ios'],
                 'skip': ['dash', 'hls'],
             }
         }
