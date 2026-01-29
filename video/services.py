@@ -31,14 +31,25 @@ class VideoDownloaderService:
                 self.cookie_file = None
         
         self.base_opts = {
-            'quiet': True,
-            'noplaylist': True,
-            'extractor_args': {
-                'youtube': {
-                    'player_client': ['android'],
-                }
+        'quiet': True,
+        'noplaylist': True,
+        'force_ipv4': True,
+        'sleep_interval': 1,
+        'max_sleep_interval': 5,
+        'http_headers': {
+            'User-Agent': 'Mozilla/5.0 (Linux; Android 13; Pixel 7)',
+            'Accept-Language': 'en-US,en;q=0.9',
+            'Accept': '*/*',
+            'Sec-Fetch-Mode': 'navigate',
+        },
+        'extractor_args': {
+            'youtube': {
+                'player_client': ['android', 'web'],
+                'skip': ['dash', 'hls'],
             }
         }
+    }
+
         
         if self.cookie_file and os.path.exists(self.cookie_file):
             self.base_opts['cookiefile'] = self.cookie_file
