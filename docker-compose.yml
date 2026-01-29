@@ -65,7 +65,7 @@ services:
       - .:/app
       - /var/www/ropeace/static:/app/staticfiles
       - /var/www/ropeace/media:/app/media
-      - ./chrome_profile:/app/chrome_profile
+      - /root/.config/google-chrome:/root/.config/google-chrome
     depends_on:
       - db
       - redis

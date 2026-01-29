@@ -36,7 +36,7 @@ class VideoDownloaderService:
         'force_ipv4': True,
         'sleep_interval': 1,
         'max_sleep_interval': 5,
-        'cookiesfrombrowser': ('chrome', '/app/chrome_profile', 'Profile 1'),
+        'cookiesfrombrowser': ('chrome',),
         'http_headers': {
             'User-Agent': 'Mozilla/5.0 (Linux; Android 13; Pixel 7)',
             'Accept-Language': 'en-US,en;q=0.9',
