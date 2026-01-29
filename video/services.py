@@ -46,7 +46,7 @@ class VideoDownloaderService:
         'extractor_args': {
             'youtube': {
                 # 'player_client': ['android', 'ios'], # Disable forced mobile clients to allow bgutil (Web) to work
-                'skip': ['dash', 'hls'],
+                # 'skip': ['dash', 'hls'], # Do not skip DASH/HLS; they are required for Web client formats
             }
         }
     }
