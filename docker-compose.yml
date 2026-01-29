@@ -38,8 +38,6 @@
 
 
 
-version: "3.9"
-
 services:
   web:
     build: .
@@ -50,7 +48,7 @@ services:
       - .:/app
       - /var/www/ropeace/static:/app/staticfiles
       - /var/www/ropeace/media:/app/media
-      - ./cookies.txt:/cookies.txt
+      - ./cookies.txt:/app/cookies.txt
 
     ports:
       - "9000:9000"
@@ -67,7 +65,7 @@ services:
       - .:/app
       - /var/www/ropeace/static:/app/staticfiles
       - /var/www/ropeace/media:/app/media
-      - ./cookies.txt:/cookies.txt
+      - ./cookies.txt:/app/cookies.txt
 
     depends_on:
       - db
