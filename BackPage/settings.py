@@ -223,7 +223,7 @@ CORS_ALLOWED_ORIGINS = [
     'http://admin.bpliberia.com',
     'http://10.10.13.57:8000',
     'https://backpage-liberia.netlify.app',
-    'https://bpliberia.com'
+    'https://www.bpliberia.com'
 ]
 CORS_ALLOWED_ALL_ORIGINS = True
 
@@ -243,7 +243,7 @@ CSRF_TRUSTED_ORIGINS = [
     'http://admin.bpliberia.com',
     'http://10.10.13.57:8000',
     'https://backpage-liberia.netlify.app',
-    'https://bpliberia.com'
+    'https://www.bpliberia.com'
 ]
 
 # Celery Configuration
