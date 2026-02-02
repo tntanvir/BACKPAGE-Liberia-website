@@ -4,6 +4,8 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate
 from django.utils import timezone
 from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 from django.core.files.base import ContentFile
 from django.conf import settings
 import random
@@ -35,12 +37,17 @@ class RegisterView(views.APIView):
             user.save()
             
             # Send OTP
+            context = {'otp': otp}
+            html_message = render_to_string('authsystem/otp_email.html', context)
+            plain_message = strip_tags(html_message)
+            
             send_mail(
                 'Verify your account',
-                f'Your OTP is {otp}',
+                plain_message,
                 settings.EMAIL_HOST_USER if hasattr(settings, 'EMAIL_HOST_USER') else 'noreply@example.com',
                 [user.email],
                 fail_silently=False,
+                html_message=html_message
             )
             
             return Response({
